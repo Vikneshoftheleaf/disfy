@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="">
+
+    <div class="container mx-auto p-6">
+
+        <div class="flex items-center justify-between w-full gap-6">
+            <h1 class="text-4xl font-bold text-center mb-6">Disfy</h1>
+
+            <!-- Search Form -->
+            <form method="POST" action="/search" class="w-full mb-6 flex justify-center">
+                <input type="text" name="query" placeholder="Search for videos..." class="border p-2 rounded-l-md w-2/3"
+                    required>
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded-r-md">Search</button>
+            </form>
+        </div>
+
+        {% if videos %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {% for video in videos %}
+            <div class="bg-white p-4 rounded-lg cursor-pointer video-card"
+                data-video-id="{{ video.video_id }}">
+                <div class="relative pb-9/16">
+                    <img src="{{ video.video_thumb }}" alt="Video Thumbnail"
+                        class="w-full h-full object-contain rounded-lg">
+
+                </div>
+                <h2 class="text-lg font-semibold mt-4">{{ video.title }}</h2>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Embedded YouTube player modal -->
+    <div id="playerModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-4 rounded-lg w-full max-w-3xl">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-semibold">Now Playing</h2>
+                <button id="closePlayer" class="text-gray-500">X</button>
+            </div>
+            <div class="mt-4">
+                <iframe id="player" class="w-full h-96" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Play video in modal
+        const videoCards = document.querySelectorAll('.video-card');
+        const playerModal = document.getElementById('playerModal');
+        const playerIframe = document.getElementById('player');
+        const closePlayer = document.getElementById('closePlayer');
+
+        videoCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const videoId = card.getAttribute('data-video-id');
+                playerIframe.src = `https://www.youtube.com/embed/${videoId}`;
+                playerModal.classList.remove('hidden');
+            });
+        });
+
+        closePlayer.addEventListener('click', () => {
+            playerModal.classList.add('hidden');
+            playerIframe.src = ''; // Stop the video when closing the modal
+        });
+    </script>
+
+</body>
+
+</html>
