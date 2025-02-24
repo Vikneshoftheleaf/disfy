@@ -76,8 +76,7 @@ def search():
     return render_template('index.html')
 
 def convert_duration_to_seconds(duration):
-    """Converts ISO 8601 duration to seconds."""
-    # Duration format: PT#H#M#S (e.g., PT1H30M15S -> 5415 seconds)
+    
     import re
 
     pattern = re.compile(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?')
@@ -90,4 +89,4 @@ def convert_duration_to_seconds(duration):
     return hours * 3600 + minutes * 60 + seconds
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
